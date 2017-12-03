@@ -1,9 +1,9 @@
+from fea_utils import *
 import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
-import fea_utils as futils
 
 def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):	
 	# step 0. INIT raw data
@@ -58,22 +58,22 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['ord_cnt_60d'] = gord.apply(lambda x : x.rolling(60).sum()).fillna(value=-1)
 	user_date_df['ord_cnt_90d'] = gord.apply(lambda x : x.rolling(90).sum()).fillna(value=-1)
 	# step 6. add recent ctr
-	user_date_df['ctr_1d'] = (user_date_df['ord_cnt_1d'] + 0.1) / (user_date_df['clk_cnt_1d'] + 0.5)
-	user_date_df['ctr_3d'] = (user_date_df['ord_cnt_3d'] + 0.1) / (user_date_df['clk_cnt_3d'] + 0.5)
-	user_date_df['ctr_7d'] = (user_date_df['ord_cnt_7d'] + 0.1) / (user_date_df['clk_cnt_7d'] + 0.5)
-	user_date_df['ctr_14d'] = (user_date_df['ord_cnt_14d'] + 0.1) / (user_date_df['clk_cnt_14d'] + 0.5)
-	user_date_df['ctr_21d'] = (user_date_df['ord_cnt_21d'] + 0.1) / (user_date_df['clk_cnt_21d'] + 0.5)
-	user_date_df['ctr_30d'] = (user_date_df['ord_cnt_30d'] + 0.1) / (user_date_df['clk_cnt_30d'] + 0.5)
-	user_date_df['ctr_60d'] = (user_date_df['ord_cnt_60d'] + 0.1) / (user_date_df['clk_cnt_60d'] + 0.5)
-	user_date_df['ctr_90d'] = (user_date_df['ord_cnt_90d'] + 0.1) / (user_date_df['clk_cnt_90d'] + 0.5)
-	user_date_df[user_date_df['ord_cnt_1d']<0 or user_date_df['clk_cnt_1d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_3d']<0 or user_date_df['clk_cnt_3d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_7d']<0 or user_date_df['clk_cnt_7d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_14d']<0 or user_date_df['clk_cnt_14d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_21d']<0 or user_date_df['clk_cnt_21d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_30d']<0 or user_date_df['clk_cnt_30d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_60d']<0 or user_date_df['clk_cnt_60d']<0] = -1
-	user_date_df[user_date_df['ord_cnt_90d']<0 or user_date_df['clk_cnt_90d']<0] = -1
+	user_date_df['ctr_1d'] = (user_date_df['ord_cnt_1d'] + 0.01) / (user_date_df['clk_cnt_1d'] + 0.05)
+	user_date_df['ctr_3d'] = (user_date_df['ord_cnt_3d'] + 0.01) / (user_date_df['clk_cnt_3d'] + 0.05)
+	user_date_df['ctr_7d'] = (user_date_df['ord_cnt_7d'] + 0.01) / (user_date_df['clk_cnt_7d'] + 0.05)
+	user_date_df['ctr_14d'] = (user_date_df['ord_cnt_14d'] + 0.01) / (user_date_df['clk_cnt_14d'] + 0.05)
+	user_date_df['ctr_21d'] = (user_date_df['ord_cnt_21d'] + 0.01) / (user_date_df['clk_cnt_21d'] + 0.05)
+	user_date_df['ctr_30d'] = (user_date_df['ord_cnt_30d'] + 0.01) / (user_date_df['clk_cnt_30d'] + 0.05)
+	user_date_df['ctr_60d'] = (user_date_df['ord_cnt_60d'] + 0.01) / (user_date_df['clk_cnt_60d'] + 0.05)
+	user_date_df['ctr_90d'] = (user_date_df['ord_cnt_90d'] + 0.01) / (user_date_df['clk_cnt_90d'] + 0.05)
+	user_date_df[(user_date_df['ord_cnt_1d']<0) | (user_date_df['clk_cnt_1d']<0)]['ctr_1d'] = -1
+	user_date_df[(user_date_df['ord_cnt_3d']<0) | (user_date_df['clk_cnt_3d']<0)]['ctr_3d'] = -1
+	user_date_df[(user_date_df['ord_cnt_7d']<0) | (user_date_df['clk_cnt_7d']<0)]['ctr_7d'] = -1
+	user_date_df[(user_date_df['ord_cnt_14d']<0) | (user_date_df['clk_cnt_14d']<0)]['ctr_14d'] = -1
+	user_date_df[(user_date_df['ord_cnt_21d']<0) | (user_date_df['clk_cnt_21d']<0)]['ctr_21d'] = -1
+	user_date_df[(user_date_df['ord_cnt_30d']<0) | (user_date_df['clk_cnt_30d']<0)]['ctr_30d'] = -1
+	user_date_df[(user_date_df['ord_cnt_60d']<0) | (user_date_df['clk_cnt_60d']<0)]['ctr_60d'] = -1
+	user_date_df[(user_date_df['ord_cnt_90d']<0) | (user_date_df['clk_cnt_90d']<0)]['ctr_90d'] = -1
 	# step 7. add recent loan
 	loan_df['date'] = loan_df['loan_time'].map(lambda lt : lt.split(' ')[0])
 	uid_date_loan = loan_df.groupby(['uid', 'date']).real_loan_amount.sum().reset_index()
