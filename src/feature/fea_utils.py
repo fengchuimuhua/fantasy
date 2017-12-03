@@ -4,18 +4,16 @@ import numpy as np
 from datetime import datetime
 
 def to_real_loan(norm_loan_amount):
-	if norm_loan_amount < 1:
+	if norm_loan_amount < 0:
 		return -1
 	else:
-		return norm_loan_amount ** 5 - 1
+		return 5 ** norm_loan_amount - 1
 
 def to_norm_loan(real_loan_amount):
 	if real_loan_amount < 0:
 		return -1
-	elif real_loan_amount == 0:
-		return 0
 	else:
-		return math.pow(real_loan_amount + 1, 0.2)
+		return math.log(real_loan_amount + 1, 5)
 
 def get_user_date_cross(user_df, loan_df):
 	# step 1. add date dim which represents date ~ date + 30
