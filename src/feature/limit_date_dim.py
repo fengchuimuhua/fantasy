@@ -126,7 +126,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 		#'clk_cnt_1d', 'clk_cnt_3d', 'clk_cnt_7d', 'clk_cnt_14d', 'clk_cnt_21d', 'clk_cnt_30d', 'clk_cnt_60d', 'clk_cnt_90d',
 		#'ord_cnt_1d', 'ord_cnt_3d', 'ord_cnt_7d', 'ord_cnt_14d', 'ord_cnt_21d', 'ord_cnt_30d', 'ord_cnt_60d', 'ord_cnt_90d',
 		#'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
-		'ld_loan_1d', 'ld_loan_1d', 'ld_loan_3d', 'ld_loan_7d', 'ld_loan_14d', 'ld_loan_21d', 'ld_loan_30d', 'ld_loan_60d', 'ld_loan_90d']].to_csv(fea_fn, index=False)
+		'ld_loan_1d', 'ld_loan_3d', 'ld_loan_7d', 'ld_loan_14d', 'ld_loan_21d', 'ld_loan_30d', 'ld_loan_60d', 'ld_loan_90d']].to_csv(fea_fn, index=False)
 	print "step 9 done "
 
 
