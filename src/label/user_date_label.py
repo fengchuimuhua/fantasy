@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
-from feature import fea_utils
+import fea_utils
 
 def convertBoolToInt(boolVar):
 	if boolVar:

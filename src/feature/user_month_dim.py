@@ -28,7 +28,6 @@ import timeit
 import time
 import itertools
 import datetime
-import lightgbm as lgbm
 import math
 import fea_utils as futils
 
@@ -113,15 +112,16 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	print user_date_df.columns , len(user_date_df)
     #step 10. output
 	user_date_df.to_csv(fea_fn , index=False)
-
+def merge(a , b):
+	return pd.merge(a , b , on =['uid','date'])
 
 if __name__ == '__main__':
 	st = datetime.datetime.now()
-	user_fn = '../../../raw_data/t_user.csv'
-	click_fn = '../../../raw_data/t_click.csv'
-	order_fn = '../../../raw_data/t_order.csv'
-	loan_fn = '../../../raw_data/t_loan.csv'
-	fea_fn = './fea_user_month_date.csv'
+	user_fn = '../../dataset/t_user.csv'
+	click_fn = '../../dataset/t_click.csv'
+	order_fn = '../../dataset/t_order.csv'
+	loan_fn = '../../dataset/t_loan.csv'
+	fea_fn = '../../fea/fea_user_month_date.csv'
 	if len(sys.argv) != 7:
 		print sys.argv[0] + '\t[user_fn]\t[click_fn]\t[order_fn]\t[loan_fn]\t[fea_fn]'
 	else:
