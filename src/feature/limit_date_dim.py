@@ -102,14 +102,14 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_cat_date_loan_df = loan_user_cat_df.groupby(['limit_cat','date']).real_loan_amount.sum().reset_index()
 	user_cat_date_df = pd.merge(user_cat_date_df , user_cat_date_loan_df , on =['limit_cat','date'] , how='left').fillna(0)
 	gloan = user_cat_date_df.groupby(['limit_cat']).real_loan_amount
-	user_cat_date_df['loan_1d'] = user_cat_date_df.real_loan_amount.map(lambda  rla : to_norm_loan(rla))
-	user_cat_date_df['loan_3d'] = gloan.apply(lambda x: x.rolling(3).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
-	user_cat_date_df['loan_7d'] = gloan.apply(lambda x: x.rolling(7).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
-	user_cat_date_df['loan_14d'] = gloan.apply(lambda x: x.rolling(14).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
-	user_cat_date_df['loan_21d'] = gloan.apply(lambda x: x.rolling(21).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
-	user_cat_date_df['loan_30d'] = gloan.apply(lambda x: x.rolling(30).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
-	user_cat_date_df['loan_60d'] = gloan.apply(lambda x: x.rolling(60).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
-	user_cat_date_df['loan_90d'] = gloan.apply(lambda x: x.rolling(90).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_1d'] = user_cat_date_df.real_loan_amount.map(lambda  rla : to_norm_loan(rla))
+	user_cat_date_df['ld_loan_3d'] = gloan.apply(lambda x: x.rolling(3).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_7d'] = gloan.apply(lambda x: x.rolling(7).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_14d'] = gloan.apply(lambda x: x.rolling(14).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_21d'] = gloan.apply(lambda x: x.rolling(21).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_30d'] = gloan.apply(lambda x: x.rolling(30).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_60d'] = gloan.apply(lambda x: x.rolling(60).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
+	user_cat_date_df['ld_loan_90d'] = gloan.apply(lambda x: x.rolling(90).sum()).fillna(value=-1).map(lambda rla: to_norm_loan(rla))
 	print set(user_cat_date_df.date)
 	print "step 7 done "
 	print len(user_date_df) , len(user_cat_date_df)
@@ -126,7 +126,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 		#'clk_cnt_1d', 'clk_cnt_3d', 'clk_cnt_7d', 'clk_cnt_14d', 'clk_cnt_21d', 'clk_cnt_30d', 'clk_cnt_60d', 'clk_cnt_90d',
 		#'ord_cnt_1d', 'ord_cnt_3d', 'ord_cnt_7d', 'ord_cnt_14d', 'ord_cnt_21d', 'ord_cnt_30d', 'ord_cnt_60d', 'ord_cnt_90d',
 		#'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
-		'loan_1d', 'loan_1d', 'loan_3d', 'loan_7d', 'loan_14d', 'loan_21d', 'loan_30d', 'loan_60d', 'loan_90d']].to_csv(fea_fn, index=False)
+		'ld_loan_1d', 'ld_loan_1d', 'ld_loan_3d', 'ld_loan_7d', 'ld_loan_14d', 'ld_loan_21d', 'ld_loan_30d', 'ld_loan_60d', 'ld_loan_90d']].to_csv(fea_fn, index=False)
 	print "step 9 done "
 
 
