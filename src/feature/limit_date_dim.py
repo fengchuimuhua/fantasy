@@ -121,13 +121,14 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 		'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
 		'loan_1d', 'loan_1d', 'loan_3d', 'loan_7d', 'loan_14d', 'loan_21d', 'loan_30d', 'loan_60d', 'loan_90d']].to_csv(fea_fn, index=False)
 	print "step 9 done "
+	
 if __name__ == '__main__':
 	st = datetime.now()
-	user_fn = '../../../raw_data/t_user.csv'
-	click_fn = '../../../raw_data/t_click.csv'
-	order_fn = '../../../raw_data/t_order.csv'
-	loan_fn = '../../../raw_data/t_loan.csv'
-	fea_fn = './limit_date_dim.csv'
+	user_fn = '../../dataset/t_user.csv'
+	click_fn = '../../dataset/t_click.csv'
+	order_fn = '../../dataset/t_order.csv'
+	loan_fn = '../../dataset/t_loan.csv'
+	fea_fn = '../../fea/fea_limit_date.csv'
 	if len(sys.argv) != 6:
 		print sys.argv[0] + '\t[user_fn]\t[click_fn]\t[order_fn]\t[loan_fn]\t[fea_fn]'
 	else:
