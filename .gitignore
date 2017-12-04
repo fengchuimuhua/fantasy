@@ -26,3 +26,4 @@ hs_err_pid*
 *.ipynb
 *.pyc
 *.DS_Store
+.DS_Store
