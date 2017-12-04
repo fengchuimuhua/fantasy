@@ -122,7 +122,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	print set(user_cat_date_df.date)
 	print "step 8 done "
 	#step 9. output
-	df[['uid','date','limit_cat',
+	df[['uid','date','ld_limit_cat',
 		#'clk_cnt_1d', 'clk_cnt_3d', 'clk_cnt_7d', 'clk_cnt_14d', 'clk_cnt_21d', 'clk_cnt_30d', 'clk_cnt_60d', 'clk_cnt_90d',
 		#'ord_cnt_1d', 'ord_cnt_3d', 'ord_cnt_7d', 'ord_cnt_14d', 'ord_cnt_21d', 'ord_cnt_30d', 'ord_cnt_60d', 'ord_cnt_90d',
 		#'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
