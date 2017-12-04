@@ -129,9 +129,11 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 		'loan_1d', 'loan_1d', 'loan_3d', 'loan_7d', 'loan_14d', 'loan_21d', 'loan_30d', 'loan_60d', 'loan_90d']].to_csv(fea_fn, index=False)
 	print "step 9 done "
 
+
 def merge(a , b):
 	res = pd.merge(a , b , on=['uid','date'])
 	return res
+
 
 if __name__ == '__main__':
 	st = datetime.now()
@@ -139,7 +141,9 @@ if __name__ == '__main__':
 	click_fn = '../../dataset/t_click.csv'
 	order_fn = '../../dataset/t_order.csv'
 	loan_fn = '../../dataset/t_loan.csv'
-	fea_fn = '../../fea/limit_date_dim_simplified.csv'
+
+	fea_fn = '../../fea/fea_limit_date.csv'
+
 	if len(sys.argv) != 6:
 		print sys.argv[0] + '\t[user_fn]\t[click_fn]\t[order_fn]\t[loan_fn]\t[fea_fn]'
 	else:
