@@ -1,3 +1,5 @@
+#encoding=utf8
+
 import sys
 import pandas as pd
 import numpy as np
@@ -8,10 +10,10 @@ import fea_utils as futils
 def gen_age_date_feature(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	
 	# 读取数据
-	df_user = pd.read_csv(user_fn, sep=',');
-	df_loan = pd.read_csv(loan_fn, sep=',');
-	df_click = pd.read_csv(click_fn, sep=',');
-	df_order = pd.read_csv(order_fn, sep=',');
+	df_user = pd.read_csv(user_fn, sep=',')
+	df_loan = pd.read_csv(loan_fn, sep=',')
+	df_click = pd.read_csv(click_fn, sep=',')
+	df_order = pd.read_csv(order_fn, sep=',')
 
 	# 生成user * date的关于点击次数的表
 	date_all = df_loan['loan_time'].str.split(' ', expand=True)[0]
@@ -95,10 +97,10 @@ def gen_age_date_feature(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	df_res.to_csv(fea_fn, index=False)
 
 if __name__ == '__main__':
-	st = datetime.datetime.now()
+	st = datetime.now()
 	
 	# 数据表地址
-	user_fn = '../../dateset/t_user.csv'
+	user_fn = '../../dataset/t_user.csv'
 	click_fn = '../../dataset/t_click.csv'
 	order_fn = '../../dataset/t_order.csv'
 	loan_fn = '../../dataset/t_loan.csv'
@@ -117,5 +119,5 @@ if __name__ == '__main__':
 
 	gen_age_date_feature(user_fn, click_fn, order_fn, loan_fn, fea_fn)
 
-	et = datetime.datetime.now()
+	et = datetime.now()
 	print 'time cost : ' + str(et - st)

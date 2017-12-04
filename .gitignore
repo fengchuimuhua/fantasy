@@ -25,5 +25,6 @@ hs_err_pid*
 *.txt
 *.ipynb
 *.pyc
-*.DS_Store
+
 .DS_Store
+
