@@ -12,7 +12,6 @@ import timeit
 import time
 import itertools
 import datetime
-import lightgbm as lgbm
 import math
 from  sklearn.metrics import mean_squared_error
 import fea_utils as futils
@@ -114,16 +113,17 @@ def transform(data , column_name):
     new_column = data[column_name].apply(lambda x :5**x - 1)
     data[new_column_name] = new_column
     return data 
-
+def merge(a , b):
+    return pd.merge(a , b , on=['uid'])
 
 if __name__ == '__main__':
     st = datetime.datetime.now()
-    user_fn = '../../../raw_data/t_user.csv'
-    click_fn = '../../../raw_data/t_click.csv'
-    order_fn = '../../../raw_data/t_order.csv'
-    loan_sum_fn = '../../../raw_data/t_loan_sum.csv'
-    loan_fn = '../../../raw_data/t_loan.csv'
-    fea_fn = './user_agg.csv'
+    user_fn = '../../dataset/t_user.csv'
+    click_fn = '../../dataset/t_click.csv'
+    order_fn = '../../dataset/t_order.csv'
+    loan_sum_fn = '../../dataset/t_loan_sum.csv'
+    loan_fn = '../../dataset/t_loan.csv'
+    fea_fn = '../../fea/user_agg.csv'
     if len(sys.argv) != 7:
         print sys.argv[0] + '\t[user_fn]\t[click_fn]\t[order_fn]\t[loan_fn]\t[loan_sum_fn]\t[fea_fn]'
     else:

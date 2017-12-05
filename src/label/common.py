@@ -1,9 +1,11 @@
 #!/usr/bin/python2.7  
 #-*- coding: UTF-8 -*-  
 #######################################################################  
-import os, sys, inspect  
-  
-  
+import os, sys, inspect
+import sys
+sys.path.append("../")
+
+
 def script_abspath(frame=inspect.currentframe()):  
     p = os.path.split(inspect.getfile( frame ))[0]  
     absdir = os.path.realpath(os.path.abspath(p))  

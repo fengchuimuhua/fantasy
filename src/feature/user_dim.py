@@ -11,7 +11,9 @@ def generate_fea(user_fn, fea_fn):
 	user_df = pd.read_csv(user_fn)
 	print user_df.describe()
 	# step 1. gen user fea
-	user_df[['uid', 'age', 'sex', 'limit']].to_csv(fea_fn, index=False)
+	user_df = user_df[['uid', 'age', 'sex', 'limit']]
+	user_df.columns = ['uid', 'u_age', 'u_sex', 'u_limit']
+	user_df.to_csv(fea_fn, index=False)
 
 if __name__ == '__main__':
 	user_fn = '../../dataset/t_user.csv'
