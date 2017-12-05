@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import fea_utils
 
+def merge(user_date_label_df, user_date_df):
+	return pd.merge(user_date_df, user_date_label_df, on=['uid', 'date'], how='left')
+
 def convertBoolToInt(boolVar):
 	if boolVar:
 		return 1
