@@ -69,7 +69,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 
 	##################################################################################################################
 	#
-	# 生成点击特征数据
+	# 生成订单特征数据
     ##################################################################################################################
 
 	print(" - Generating order features : ")
@@ -180,7 +180,7 @@ if __name__ == '__main__':
 		loan_fn = sys.argv[4]
 		fea_fn = sys.argv[5]
 
-    # 生成 age * date 维度的特征, 并存放为fea_fn文件
+    # 生成 sex * date 维度的特征, 并存放为fea_fn文件
 	gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn)
 
 	et = datetime.now()
