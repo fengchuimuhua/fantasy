@@ -75,10 +75,10 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	#step 3. left balance 
 
 	user_date_loan_df = pd.merge(user_month_df , loan_df , on=['uid'] , how='left').fillna(0)
-	user_date_loan_df['um_delta_month'] = user_date_loan_df.month - user_date_loan_df.loan_month
-	user_date_loan_df['um_left_plannum'] = user_date_loan_df.apply( lambda x : -1 if x['delta_month'] <= 0 else x['plannum'] - x['delta_month'] , axis = 1)
-	user_date_loan_df['um_left_balance'] =  user_date_loan_df.apply(lambda x : 0 if x.left_plannum < 0 else x.real_loan_amount / x.plannum * x.left_plannum , axis = 1)
-	user_date_loan_df['um_month_need_pay'] = user_date_loan_df.apply(lambda x : 0 if x.left_plannum < 0 else x.real_loan_amount , axis=1)
+	user_date_loan_df['delta_month'] = user_date_loan_df.month - user_date_loan_df.loan_month
+	user_date_loan_df['left_plannum'] = user_date_loan_df.apply( lambda x : -1 if x['delta_month'] <= 0 else x['plannum'] - x['delta_month'] , axis = 1)
+	user_date_loan_df['left_balance'] =  user_date_loan_df.apply(lambda x : 0 if x.left_plannum < 0 else x.real_loan_amount / x.plannum * x.left_plannum , axis = 1)
+	user_date_loan_df['month_need_pay'] = user_date_loan_df.apply(lambda x : 0 if x.left_plannum < 0 else x.real_loan_amount , axis=1)
 
 	user_month_left_banalce = user_date_loan_df.groupby(['uid','month']).agg({"left_balance":np.sum , 'month_need_pay':np.sum , 'real_limit':np.max}).reset_index()
 
@@ -90,7 +90,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	#step 5. user_month_tuned_real limiit 
 	agg = pd.merge(user_month_loan_sum_df , user_month_loan_sum_df , on=['uid'])
 	agg = agg[agg.loan_month_x >= agg.loan_month_y]
-	user_month_tuned_real_limit_df = agg.groupby(['uid', 'loan_month_x']).agg({"real_loan_amount_y":np.max }).reset_index().sort_values(['uid','loan_month_x']).rename(columns = {"loan_month_x":"month" , "real_loan_amount_y":'um_tuned_limit'})
+	user_month_tuned_real_limit_df = agg.groupby(['uid', 'loan_month_x']).agg({"real_loan_amount_y":np.max }).reset_index().sort_values(['uid','loan_month_x']).rename(columns = {"loan_month_x":"month" , "real_loan_amount_y":'tuned_limit'})
 
 
     #step 6. merge left balance and user month loan sum 
@@ -111,7 +111,9 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df = pd.merge(user_date_df , user_month_df , on = ['uid','month'])
 	print user_date_df.columns , len(user_date_df)
     #step 10. output
-	user_date_df[['uid','date','um_left_plannum','um_left_balance','um_month_need_pay','um_tuned_limit']].to_csv(fea_fn , index=False)
+	df = user_date_df[['uid','date','left_balance','month_need_pay','tuned_limit']]
+	df.columns = [['uid','date','um_left_balance','um_month_need_pay','um_tuned_limit']]
+	df.to_csv(fea_fn , index=False)
 def merge(a , b):
 	return pd.merge(a , b , on =['uid','date'])
 
