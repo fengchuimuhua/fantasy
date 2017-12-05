@@ -1,7 +1,6 @@
 import sys
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 def merge(user_df, user_date_df):
 	return pd.merge(user_date_df, user_df, on='uid', how='left')

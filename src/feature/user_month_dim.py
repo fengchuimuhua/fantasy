@@ -20,13 +20,10 @@ import datetime
 #coding:utf-8
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-
 
 dtfmt = '%Y-%m-%d %H:%M:%S' 
 import timeit
 import time
-import itertools
 import datetime
 import math
 import fea_utils as futils
