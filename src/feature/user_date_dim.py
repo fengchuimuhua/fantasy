@@ -82,7 +82,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	# step 7. add recent loan info
 	loan_df['date'] = loan_df['loan_time'].map(lambda lt : lt.split(' ')[0])
 	uid_date_loan = loan_df.groupby(['uid', 'date']).real_loan_amount.sum().reset_index()
-	uid_date_loancnt = 
+	#uid_date_loancnt = 
 	user_date_df = pd.merge(user_date_df, uid_date_loan, on=['uid','date'], how='left')
 	user_date_df['real_loan_amount'] = user_date_df['real_loan_amount'].fillna(value=0)
 	gloan = user_date_df.groupby('uid').real_loan_amount
