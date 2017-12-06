@@ -1,4 +1,5 @@
 #encoding=utf8
+import common
 import sys
 import pandas as pd
 import numpy as np
