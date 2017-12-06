@@ -66,7 +66,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['ord_cnt_30d'] = gord.apply(lambda x : x.rolling(30).sum()).fillna(value=-1)
 	user_date_df['ord_cnt_60d'] = gord.apply(lambda x : x.rolling(60).sum()).fillna(value=-1)
 	user_date_df['ord_cnt_90d'] = gord.apply(lambda x : x.rolling(90).sum()).fillna(value=-1)
-	step 6. add recent ctr
+	#step 6. add recent ctr
 	user_date_df['ctr_1d'] = (user_date_df['ord_cnt_1d'] + 0.01) / (user_date_df['clk_cnt_1d'] + 0.05)
 	user_date_df['ctr_3d'] = (user_date_df['ord_cnt_3d'] + 0.01) / (user_date_df['clk_cnt_3d'] + 0.05)
 	user_date_df['ctr_7d'] = (user_date_df['ord_cnt_7d'] + 0.01) / (user_date_df['clk_cnt_7d'] + 0.05)
@@ -209,9 +209,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 		lambda rla: to_norm_loan(rla))
 	user_date_df['loan_std_90d'] = gloan.apply(lambda x: x.rolling(90).std()).fillna(value=-1).map(
 		lambda rla: to_norm_loan(rla))
-=======
-	
->>>>>>> 86a8ff1e149f5bc677d29ae7f614e42c7eb78e40
+
 	# step 8. output
 	print 'save...'
 	user_date_df = 	user_date_df[['uid', 'date', 'active_days',
