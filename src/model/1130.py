@@ -35,9 +35,9 @@ user_df = pd.read_csv(fea_user_fn)
 user_date_df = pd.read_csv(fea_user_date_fn)
 limit_date_df = pd.read_csv(fea_limit_date_fn)
 user_month_df = pd.read_csv(fea_user_month_fn)
-# age_date_df = pd.read_csv(fea_age_date_fn)
-# sex_date_df = pd.read_csv(fea_sex_date_fn)
-# age_sex_date_df = pd.read_csv(fea_age_sex_date_fn)
+age_date_df = pd.read_csv(fea_age_date_fn)
+sex_date_df = pd.read_csv(fea_sex_date_fn)
+age_sex_date_df = pd.read_csv(fea_age_sex_date_fn)
 user_date_label_df = pd.read_csv(label_user_date_fn)
 
 print 'step 1. read done'
@@ -45,14 +45,14 @@ print 'step 1. read done'
 user_date_df = user_dim.merge(user_df, user_date_df)
 user_date_df = limit_date_dim.merge(limit_date_df, user_date_df)
 user_date_df = user_month_dim.merge(user_month_df, user_date_df)
-# user_date_df = age_date_dim.merge(age_date_df, user_date_df)
-# user_date_df = sex_date_dim.merge(sex_date_df, user_date_df)
-# user_date_df = age_sex_date_dim.merge(age_sex_date_df, user_date_df)
+user_date_df = age_date_dim.merge(age_date_df, user_date_df)
+user_date_df = sex_date_dim.merge(sex_date_df, user_date_df)
+user_date_df = age_sex_date_dim.merge(age_sex_date_df, user_date_df)
 user_date_df = user_date_label.merge(user_date_label_df, user_date_df)
 
 print 'step 2. join data done'
 
-feature_col_list = ['u_age', 'u_sex', 'u_limit', 'ud_active_days', 'ud_clk_cnt_1d', 'ud_clk_cnt_3d', 'ud_clk_cnt_7d', 'ud_clk_cnt_14d', 'ud_clk_cnt_21d', 'ud_clk_cnt_30d', 'ud_clk_cnt_60d', 'ud_clk_cnt_90d', 'ud_ord_cnt_1d', 'ud_ord_cnt_3d', 'ud_ord_cnt_7d', 'ud_ord_cnt_14d', 'ud_ord_cnt_21d', 'ud_ord_cnt_30d', 'ud_ord_cnt_60d', 'ud_ord_cnt_90d', 'ud_ctr_1d', 'ud_ctr_3d', 'ud_ctr_7d', 'ud_ctr_14d', 'ud_ctr_21d', 'ud_ctr_30d', 'ud_ctr_60d', 'ud_ctr_90d', 'ud_loan_1d', 'ud_loan_3d', 'ud_loan_7d', 'ud_loan_14d', 'ud_loan_21d', 'ud_loan_30d', 'ud_loan_60d', 'ud_loan_90d', 'ld_limit_cat', 'ld_loan_1d', 'ld_loan_3d', 'ld_loan_7d', 'ld_loan_14d', 'ld_loan_21d', 'ld_loan_30d', 'ld_loan_60d', 'ld_loan_90d', 'um_left_balance','um_month_need_pay','um_tuned_limit']
+feature_col_list = ['u_age', 'u_sex', 'u_limit', 'ud_active_days', 'ud_clk_cnt_1d', 'ud_clk_cnt_3d', 'ud_clk_cnt_7d', 'ud_clk_cnt_14d', 'ud_clk_cnt_21d', 'ud_clk_cnt_30d', 'ud_clk_cnt_60d', 'ud_clk_cnt_90d', 'ud_ord_cnt_1d', 'ud_ord_cnt_3d', 'ud_ord_cnt_7d', 'ud_ord_cnt_14d', 'ud_ord_cnt_21d', 'ud_ord_cnt_30d', 'ud_ord_cnt_60d', 'ud_ord_cnt_90d', 'ud_ctr_1d', 'ud_ctr_3d', 'ud_ctr_7d', 'ud_ctr_14d', 'ud_ctr_21d', 'ud_ctr_30d', 'ud_ctr_60d', 'ud_ctr_90d', 'ud_loan_1d', 'ud_loan_3d', 'ud_loan_7d', 'ud_loan_14d', 'ud_loan_21d', 'ud_loan_30d', 'ud_loan_60d', 'ud_loan_90d', 'ld_limit_cat', 'ld_loan_1d', 'ld_loan_3d', 'ld_loan_7d', 'ld_loan_14d', 'ld_loan_21d', 'ld_loan_30d', 'ld_loan_60d', 'ld_loan_90d', 'um_left_balance','um_month_need_pay','um_tuned_limit','ad_clk_cnt', 'ad_clk_cnt_3d', 'ad_clk_cnt_7d', 'ad_clk_cnt_14d', 'ad_clk_cnt_21d', 'ad_clk_cnt_30d', 'ad_clk_cnt_60d', 'ad_clk_cnt_90d', 'ad_ord_cnt', 'ad_ord_cnt_3d', 'ad_ord_cnt_7d', 'ad_ord_cnt_14d', 'ad_ord_cnt_21d', 'ad_ord_cnt_30d', 'ad_ord_cnt_60d', 'ad_ord_cnt_90d', 'ad_ctr', 'ad_ctr_3d', 'ad_ctr_7d', 'ad_ctr_14d', 'ad_ctr_21d', 'ad_ctr_30d', 'ad_ctr_60d', 'ad_ctr_90d', 'ad_loan_norm', 'ad_loan_norm_3d', 'ad_loan_norm_7d', 'ad_loan_norm_14d', 'ad_loan_norm_21d', 'ad_loan_norm_30d', 'ad_loan_norm_60d', 'ad_loan_norm_90d', 'sd_clk_cnt', 'sd_clk_cnt_3d', 'sd_clk_cnt_7d', 'sd_clk_cnt_14d', 'sd_clk_cnt_21d', 'sd_clk_cnt_30d', 'sd_clk_cnt_60d', 'sd_clk_cnt_90d', 'sd_ord_cnt', 'sd_ord_cnt_3d', 'sd_ord_cnt_7d', 'sd_ord_cnt_14d', 'sd_ord_cnt_21d', 'sd_ord_cnt_30d', 'sd_ord_cnt_60d', 'sd_ord_cnt_90d', 'sd_ctr', 'sd_ctr_3d', 'sd_ctr_7d', 'sd_ctr_14d', 'sd_ctr_21d', 'sd_ctr_30d', 'sd_ctr_60d', 'sd_ctr_90d', 'sd_loan_norm', 'sd_loan_norm_3d', 'sd_loan_norm_7d', 'sd_loan_norm_14d', 'sd_loan_norm_21d', 'sd_loan_norm_30d', 'sd_loan_norm_60d', 'sd_loan_norm_90d', 'asd_clk_cnt', 'asd_clk_cnt_3d', 'asd_clk_cnt_7d', 'asd_clk_cnt_14d', 'asd_clk_cnt_21d', 'asd_clk_cnt_30d', 'asd_clk_cnt_60d', 'asd_clk_cnt_90d', 'asd_ord_cnt', 'asd_ord_cnt_3d', 'asd_ord_cnt_7d', 'asd_ord_cnt_14d', 'asd_ord_cnt_21d', 'asd_ord_cnt_30d', 'asd_ord_cnt_60d', 'asd_ord_cnt_90d', 'asd_ctr', 'asd_ctr_3d', 'asd_ctr_7d', 'asd_ctr_14d', 'asd_ctr_21d', 'asd_ctr_30d', 'asd_ctr_60d', 'asd_ctr_90d', 'asd_loan_norm', 'asd_loan_norm_3d', 'asd_loan_norm_7d', 'asd_loan_norm_14d', 'asd_loan_norm_21d', 'asd_loan_norm_30d', 'asd_loan_norm_60d', 'asd_loan_norm_90d']
 
 # label: is_loan_in_31d, loan_amount_in_31d
 
@@ -69,7 +69,6 @@ param = {'max_depth': 7, 'eta': 0.2, 'silent': 1, 'objective': 'reg:linear'}
 param['eval_metric'] = ['rmse']
 evals_result = {}
 bst = xgb.train(param, train, 100, watchlist, evals_result=evals_result)
-
 
 # output prediction file
 test_x = user_date_df[user_date_df['date'] == '2016-11-30'][feature_col_list]
