@@ -14,6 +14,14 @@ def convertBoolToInt(boolVar):
 	else:
 		return 0
 
+def isLoanIn31d(loan_cnt):
+	if loan_cnt > 0:
+		return 1
+	elif loan_cnt == 0:
+		return 0
+	else:
+		return loan_cnt
+
 def gen_label(user_fn, loan_fn, label_fn):
 	# step 0. loan raw file
 	user_df = pd.read_csv(user_fn)
@@ -30,11 +38,12 @@ def gen_label(user_fn, loan_fn, label_fn):
 	user_date_df['is_loan'] = (user_date_df['real_loan_amount'] > 0).map(convertBoolToInt)
 	grp_loan = user_date_df.groupby('uid').is_loan
 	user_date_df['loan_cnt_in_31d'] =  grp_loan.apply(lambda x : (x[::-1].rolling(window=31).sum())[::-1] - x).fillna(-1)
+	user_date_df['is_loan_in_31d'] = user_date_df['loan_cnt_in_31d'].map(isLoanIn31d)
 	grp_loan = user_date_df.groupby('uid').real_loan_amount
 	user_date_df['real_loan_amount_in_31d'] = grp_loan.apply(lambda x : (x[::-1].rolling(window=32).sum())[::-1] - x).fillna(-1)
 	user_date_df['loan_amount_in_31d'] = user_date_df['real_loan_amount_in_31d'].map(lambda x : fea_utils.to_norm_loan(x))
 	# step 4. output
-	user_date_df[['uid', 'date', 'real_loan_amount', 'is_loan', 'loan_cnt_in_31d', 'real_loan_amount_in_31d', 'loan_amount_in_31d']].to_csv(label_fn, index=False)
+	user_date_df[['uid', 'date', 'real_loan_amount', 'is_loan_in_31d', 'loan_cnt_in_31d', 'real_loan_amount_in_31d', 'loan_amount_in_31d']].to_csv(label_fn, index=False)
 
 if __name__ == '__main__':
 	st = datetime.now()

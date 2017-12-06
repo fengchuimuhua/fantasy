@@ -145,10 +145,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 
 	df = pd.merge(user_date_df[['uid', 'age', 'date']], age_date_fea_df, on=['age', 'date'])
 	
-	df = df[['uid', 'date', 'ad_clk_cnt', 'ad_clk_cnt_3d', 'ad_clk_cnt_7d', 'ad_clk_cnt_14d', 'ad_clk_cnt_21d', 'ad_clk_cnt_30d', 'ad_clk_cnt_60d', 
-			'ad_clk_cnt_90d', 'ad_ord_cnt', 'ad_ord_cnt_3d', 'ad_ord_cnt_7d', 'ad_ord_cnt_14d', 'ad_ord_cnt_21d', 'ad_ord_cnt_30d', 'ad_ord_cnt_60d',
-			'ad_ord_cnt_90d', 'ad_ctr', 'ad_ctr_3d', 'ad_ctr_7d', 'ad_ctr_14d', 'ad_ctr_21d', 'ad_ctr_30d', 'ad_ctr_60d', 'ad_ctr_90d', 'ad_loan_norm',
-			'ad_loan_norm_3d', 'ad_loan_norm_7d', 'ad_loan_norm_14d', 'ad_loan_norm_21d', 'ad_loan_norm_30d', 'ad_loan_norm_60d', 'ad_loan_norm_90d']]
+	df = df[['uid', 'date', 'ad_clk_cnt', 'ad_clk_cnt_3d', 'ad_clk_cnt_7d', 'ad_clk_cnt_14d', 'ad_clk_cnt_21d', 'ad_clk_cnt_30d', 'ad_clk_cnt_60d', 'ad_clk_cnt_90d', 'ad_ord_cnt', 'ad_ord_cnt_3d', 'ad_ord_cnt_7d', 'ad_ord_cnt_14d', 'ad_ord_cnt_21d', 'ad_ord_cnt_30d', 'ad_ord_cnt_60d', 'ad_ord_cnt_90d', 'ad_ctr', 'ad_ctr_3d', 'ad_ctr_7d', 'ad_ctr_14d', 'ad_ctr_21d', 'ad_ctr_30d', 'ad_ctr_60d', 'ad_ctr_90d', 'ad_loan_norm', 'ad_loan_norm_3d', 'ad_loan_norm_7d', 'ad_loan_norm_14d', 'ad_loan_norm_21d', 'ad_loan_norm_30d', 'ad_loan_norm_60d', 'ad_loan_norm_90d']]
 
 	df.to_csv(fea_fn, index=False)
 

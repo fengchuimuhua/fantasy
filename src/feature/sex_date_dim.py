@@ -156,10 +156,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	print(" - Writing features into file ! ")
 
 	df = pd.merge(user_date_df[['uid', 'sex', 'date']], sex_date_fea_df, on=['sex', 'date'])
-	df = df[['uid', 'date', 'sd_clk_cnt', 'sd_clk_cnt_3d', 'sd_clk_cnt_7d', 'sd_clk_cnt_14d', 'sd_clk_cnt_21d', 'sd_clk_cnt_30d', 'sd_clk_cnt_60d', 
-			'sd_clk_cnt_90d', 'sd_ord_cnt', 'sd_ord_cnt_3d', 'sd_ord_cnt_7d', 'sd_ord_cnt_14d', 'sd_ord_cnt_21d', 'sd_ord_cnt_30d', 'sd_ord_cnt_60d',
-			'sd_ord_cnt_90d', 'sd_ctr', 'sd_ctr_3d', 'sd_ctr_7d', 'sd_ctr_14d', 'sd_ctr_21d', 'sd_ctr_30d', 'sd_ctr_60d', 'sd_ctr_90d', 'sd_loan_norm',
-			'sd_loan_norm_3d', 'sd_loan_norm_7d', 'sd_loan_norm_14d', 'sd_loan_norm_21d', 'sd_loan_norm_30d', 'sd_loan_norm_60d', 'sd_loan_norm_90d']]
+	df = df[['uid', 'date', 'sd_clk_cnt', 'sd_clk_cnt_3d', 'sd_clk_cnt_7d', 'sd_clk_cnt_14d', 'sd_clk_cnt_21d', 'sd_clk_cnt_30d', 'sd_clk_cnt_60d', 'sd_clk_cnt_90d', 'sd_ord_cnt', 'sd_ord_cnt_3d', 'sd_ord_cnt_7d', 'sd_ord_cnt_14d', 'sd_ord_cnt_21d', 'sd_ord_cnt_30d', 'sd_ord_cnt_60d', 'sd_ord_cnt_90d', 'sd_ctr', 'sd_ctr_3d', 'sd_ctr_7d', 'sd_ctr_14d', 'sd_ctr_21d', 'sd_ctr_30d', 'sd_ctr_60d', 'sd_ctr_90d', 'sd_loan_norm', 'sd_loan_norm_3d', 'sd_loan_norm_7d', 'sd_loan_norm_14d', 'sd_loan_norm_21d', 'sd_loan_norm_30d', 'sd_loan_norm_60d', 'sd_loan_norm_90d']]
 	df.to_csv(fea_fn, index=False)
 
 	print("-------------------- Success ----------------------")
