@@ -1,0 +1,19 @@
+user_date_dim.py	[user_fn]	[click_fn]	[order_fn]	[loan_fn]	[fea_fn]
+Traceback (most recent call last):
+  File "user_date_dim.py", line 210, in <module>
+    gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn)
+  File "user_date_dim.py", line 98, in gen_fea
+    user_date_df['loan_num_3d'] = gloan.apply(lambda x : x.rolling(3).size()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
+  File "/Library/Python/2.7/site-packages/pandas/core/groupby.py", line 651, in apply
+    return self._python_apply_general(f)
+  File "/Library/Python/2.7/site-packages/pandas/core/groupby.py", line 655, in _python_apply_general
+    self.axis)
+  File "/Library/Python/2.7/site-packages/pandas/core/groupby.py", line 1527, in apply
+    res = f(group)
+  File "/Library/Python/2.7/site-packages/pandas/core/groupby.py", line 647, in f
+    return func(g, *args, **kwargs)
+  File "user_date_dim.py", line 98, in <lambda>
+    user_date_df['loan_num_3d'] = gloan.apply(lambda x : x.rolling(3).size()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
+  File "/Library/Python/2.7/site-packages/pandas/core/window.py", line 124, in __getattr__
+    (type(self).__name__, attr))
+AttributeError: 'Rolling' object has no attribute 'size'
