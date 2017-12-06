@@ -1,6 +1,8 @@
 
-#python user_dim.py #[ok]
-#python user_date_dim.py #[OK]
-#python age_date_feature.py #[N]
+python user_dim.py
+python user_date_dim.py
 python limit_date_dim.py
 python user_month_dim.py
+python age_date_dim.py
+python sex_date_dim.py
+python age_sex_date_dim.py
