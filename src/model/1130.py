@@ -2,7 +2,7 @@
 import common
 import xgboost as xgb
 import sys
-sys.path.append('/Users/dingxuetao/Desktop/快盘/competition/2017jd/fantasy/src')
+sys.path.append('../')
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,6 +14,12 @@ from feature import sex_date_dim
 from feature import age_sex_date_dim
 from label import user_date_label
 from datetime import datetime
+
+def cvt(x):
+    if x <= 1:
+        return 0
+    else:
+        return x
 
 st = datetime.now()
 fea_user_fn = '../../fea/fea_user.csv'
@@ -73,7 +79,8 @@ pred = bst.predict(test)
 
 te = pd.DataFrame({'uid': user_date_df[user_date_df['date'] == '2016-11-30']['uid']})
 te['loan_amount_in_31d'] = pred
-te.to_csv("pred.csv", index=False)
+te['loan_amount_in_31d'] = te['loan_amount_in_31d'].map(lambda x : cvt(x))
+te.to_csv("pred.csv", index=False, header=False)
 et = datetime.now()
 print 'time cost : ' + str(et - st)
 #print sorted(bst1.get_fscore().iteritems(),key=lambda d:d[1], reverse=True)
