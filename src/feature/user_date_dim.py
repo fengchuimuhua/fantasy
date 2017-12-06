@@ -83,12 +83,7 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['ctr_30d'] = map(lambda ord, clk, ctr : ctr_norm(ord, clk, ctr), user_date_df['ord_cnt_30d'], user_date_df['clk_cnt_30d'], user_date_df['ctr_30d'])
 	user_date_df['ctr_60d'] = map(lambda ord, clk, ctr : ctr_norm(ord, clk, ctr), user_date_df['ord_cnt_60d'], user_date_df['clk_cnt_60d'], user_date_df['ctr_60d'])
 	user_date_df['ctr_90d'] = map(lambda ord, clk, ctr : ctr_norm(ord, clk, ctr), user_date_df['ord_cnt_90d'], user_date_df['clk_cnt_90d'], user_date_df['ctr_90d'])
-<<<<<<< HEAD
-	#step 7. add recent loan
-	print 'loan_sum'
-=======
 	# step 7. add recent loan info
->>>>>>> 86a8ff1e149f5bc677d29ae7f614e42c7eb78e40
 	loan_df['date'] = loan_df['loan_time'].map(lambda lt : lt.split(' ')[0])
 	uid_date_loan = loan_df.groupby(['uid', 'date']).real_loan_amount.sum().reset_index()
 	#uid_date_loancnt = 
@@ -103,7 +98,6 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['loan_30d'] = gloan.apply(lambda x : x.rolling(30).sum()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
 	user_date_df['loan_60d'] = gloan.apply(lambda x : x.rolling(60).sum()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
 	user_date_df['loan_90d'] = gloan.apply(lambda x : x.rolling(90).sum()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
-<<<<<<< HEAD
 	# add loan num
 	# user_date_df['loan_num_1d'] = user_date_df['real_loan_amount'].map(lambda rla : to_norm_loan(rla))
 	# user_date_df['loan_num_3d'] = gloan.apply(lambda x : x.rolling(3).size()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
@@ -209,9 +203,6 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 		lambda rla: to_norm_loan(rla))
 	user_date_df['loan_std_90d'] = gloan.apply(lambda x: x.rolling(90).std()).fillna(value=-1).map(
 		lambda rla: to_norm_loan(rla))
-=======
-	
->>>>>>> 86a8ff1e149f5bc677d29ae7f614e42c7eb78e40
 	# step 8. output
 	print 'save...'
 	user_date_df = 	user_date_df[['uid', 'date', 'active_days',
