@@ -104,14 +104,9 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['loan_90d'] = gloan.apply(lambda x : x.rolling(90).sum()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
 
 	# add loan num
-	# user_date_df['loan_num_1d'] = user_date_df['real_loan_amount'].map(lambda rla : to_norm_loan(rla))
-	# user_date_df['loan_num_3d'] = gloan.apply(lambda x : x.rolling(3).size()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
-	# user_date_df['loan_num_7d'] = gloan.apply(lambda x : x.rolling(7).size()).fillna(value=-1).map(lambda rla : to_norm_loan(rla))
-	# user_date_df['loan_num_14d'] = gloan.apply(lambda x : x.rolling(14).size()).fillna(value=-1)
-	# user_date_df['loan_num_21d'] = gloan.apply(lambda x : x.rolling(21).size()).fillna(value=-1)
-	# user_date_df['loan_num_30d'] = gloan.apply(lambda x : x.rolling(30).size()).fillna(value=-1)
-	# user_date_df['loan_num_60d'] = gloan.apply(lambda x : x.rolling(60).size()).fillna(value=-1)
-	# user_date_df['loan_num_90d'] = gloan.apply(lambda x : x.rolling(90).size()).fillna(value=-1)
+	user_date_df['loan_num_30d'] = gloan.apply(lambda x : x.rolling(30).count()).fillna(value=-1)
+	user_date_df['loan_num_60d'] = gloan.apply(lambda x : x.rolling(60).count()).fillna(value=-1)
+	user_date_df['loan_num_90d'] = gloan.apply(lambda x : x.rolling(90).count()).fillna(value=-1)
 	# add max loan
 	print 'loan max'
 	user_date_df['loan_max_3d'] = gloan.apply(lambda x: x.rolling(3).max()).fillna(value=-1).map(
@@ -209,35 +204,80 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['loan_std_90d'] = gloan.apply(lambda x: x.rolling(90).std()).fillna(value=-1).map(
 		lambda rla: to_norm_loan(rla))
 
+	print "real loan statistic info "
+	#add real loan 
+	user_date_df['real_loan_30d'] = gloan.apply(lambda x : x.rolling(30).sum()).fillna(value=-1)
+	user_date_df['real_loan_60d'] = gloan.apply(lambda x : x.rolling(60).sum()).fillna(value=-1)
+	user_date_df['real_loan_90d'] = gloan.apply(lambda x : x.rolling(90).sum()).fillna(value=-1)
+	#add real lona max
+	user_date_df['real_loan_max_30d'] = gloan.apply(lambda x : x.rolling(30).max()).fillna(value=-1)
+	user_date_df['real_loan_max_60d'] = gloan.apply(lambda x : x.rolling(60).max()).fillna(value=-1)
+	user_date_df['real_loan_max_90d'] = gloan.apply(lambda x : x.rolling(90).max()).fillna(value=-1)
+
+	#add real lona min
+	user_date_df['real_loan_min_30d'] = gloan.apply(lambda x : x.rolling(30).min()).fillna(value=-1)
+	user_date_df['real_loan_min_60d'] = gloan.apply(lambda x : x.rolling(60).min()).fillna(value=-1)
+	user_date_df['real_loan_min_90d'] = gloan.apply(lambda x : x.rolling(90).min()).fillna(value=-1)
+
+	#add real lona skurt
+	user_date_df['real_loan_kurt_30d'] = gloan.apply(lambda x : x.rolling(30).kurt()).fillna(value=-1)
+	user_date_df['real_loan_kurt_60d'] = gloan.apply(lambda x : x.rolling(60).kurt()).fillna(value=-1)
+	user_date_df['real_loan_kurt_90d'] = gloan.apply(lambda x : x.rolling(90).kurt()).fillna(value=-1)
+
+	#add real lona skew
+	user_date_df['real_loan_skew_30d'] = gloan.apply(lambda x : x.rolling(30).skew()).fillna(value=-1)
+	user_date_df['real_loan_skew_60d'] = gloan.apply(lambda x : x.rolling(60).skew()).fillna(value=-1)
+	user_date_df['real_loan_skew_90d'] = gloan.apply(lambda x : x.rolling(90).skew()).fillna(value=-1)
+
+	#add real loan std 
+	user_date_df['real_loan_std_30d'] = gloan.apply(lambda x : x.rolling(30).std()).fillna(value=-1)
+	user_date_df['real_loan_std_60d'] = gloan.apply(lambda x : x.rolling(60).std()).fillna(value=-1)
+	user_date_df['real_loan_std_90d'] = gloan.apply(lambda x : x.rolling(90).std()).fillna(value=-1)
+
+
 	# step 8. output
 	print 'save...'
 	user_date_df = 	user_date_df[['uid', 'date', 'active_days',
-				  #'clk_cnt_1d', 'clk_cnt_3d', 'clk_cnt_7d', 'clk_cnt_14d', 'clk_cnt_21d', 'clk_cnt_30d', 'clk_cnt_60d','clk_cnt_90d',
-				  #'ord_cnt_1d', 'ord_cnt_3d', 'ord_cnt_7d', 'ord_cnt_14d', 'ord_cnt_21d', 'ord_cnt_30d', 'ord_cnt_60d', 'ord_cnt_90d',
-				  #'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
+				  'clk_cnt_1d', 'clk_cnt_3d', 'clk_cnt_7d', 'clk_cnt_14d', 'clk_cnt_21d', 'clk_cnt_30d', 'clk_cnt_60d','clk_cnt_90d',
+				  'ord_cnt_1d', 'ord_cnt_3d', 'ord_cnt_7d', 'ord_cnt_14d', 'ord_cnt_21d', 'ord_cnt_30d', 'ord_cnt_60d', 'ord_cnt_90d',
+				  'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
 				  'loan_1d', 'loan_1d', 'loan_3d', 'loan_7d', 'loan_14d', 'loan_21d', 'loan_30d', 'loan_60d',
 				  'loan_90d',
-				  #'loan_num_7d', 'loan_num_14d', 'loan_num_21d', 'loan_num_30d', 'loan_num_60d', 'loan_num_90d',
+				  'loan_num_30d', 'loan_num_60d', 'loan_num_90d',
 				  'loan_max_7d', 'loan_max_14d', 'loan_max_21d', 'loan_max_30d', 'loan_max_60d', 'loan_max_90d',
 				  'loan_min_7d', 'loan_min_14d', 'loan_min_21d', 'loan_min_30d', 'loan_min_60d', 'loan_min_90d',
 				  'loan_std_7d', 'loan_std_14d', 'loan_std_21d', 'loan_std_30d', 'loan_std_60d', 'loan_std_90d',
 				  'loan_mean_7d', 'loan_mean_14d', 'loan_mean_21d', 'loan_mean_30d', 'loan_mean_60d', 'loan_mean_90d',
 				  'loan_skew_7d', 'loan_skew_14d', 'loan_skew_21d', 'loan_skew_30d', 'loan_skew_60d', 'loan_skew_90d',
-				  'loan_mad_7d', 'loan_mad_14d', 'loan_mad_21d', 'loan_mad_30d', 'loan_mad_60d', 'loan_mad_90d'
+				  'loan_mad_7d', 'loan_mad_14d', 'loan_mad_21d', 'loan_mad_30d', 'loan_mad_60d', 'loan_mad_90d',
+				  'real_loan_30d','real_loan_60d','real_loan_90d',
+				  'real_loan_max_30d','real_loan_max_60d','real_loan_max_90d',
+				  'real_loan_min_30d','real_loan_min_60d','real_loan_min_90d',
+				  'real_loan_kurt_30d','real_loan_kurt_60d','real_loan_kurt_90d',
+				  'real_loan_skew_30d','real_loan_skew_60d','real_loan_skew_90d',
+				  'real_loan_std_30d','real_loan_std_60d','real_loan_std_90d',
+
 				  ]]
 
 	user_date_df.columns = ['uid','date','ud_active_days',
 'ud_clk_cnt_1d','ud_clk_cnt_3d','ud_clk_cnt_7d','ud_clk_cnt_14d','ud_clk_cnt_21d','ud_clk_cnt_30d','ud_clk_cnt_60d','ud_clk_cnt_90d',
 'ud_ord_cnt_1d','ud_ord_cnt_3d','ud_ord_cnt_7d','ud_ord_cnt_14d','ud_ord_cnt_21d','ud_ord_cnt_30d','ud_ord_cnt_60d','ud_ord_cnt_90d',
 'ud_ctr_1d','ud_ctr_3d','ud_ctr_7d','ud_ctr_14d','ud_ctr_21d','ud_ctr_30d','ud_ctr_60d','ud_ctr_90d',
-'loan_1d','ud_loan_1d','ud_loan_3d','ud_loan_7d','ud_loan_14d','ud_loan_21d','ud_loan_30d','ud_loan_60d','ud_loan_90d',
-#'loan_num_7d','ud_loan_num_14d','ud_loan_num_21d','ud_loan_num_30d','ud_loan_num_60d','ud_loan_num_90d',
-'loan_max_7d','ud_loan_max_14d','ud_loan_max_21d','ud_loan_max_30d','ud_loan_max_60d','ud_loan_max_90d',
-'loan_min_7d','ud_loan_min_14d','ud_loan_min_21d','ud_loan_min_30d','ud_loan_min_60d','ud_loan_min_90d',
-'loan_std_7d','ud_loan_std_14d','ud_loan_std_21d','ud_loan_std_30d','ud_loan_std_60d','ud_loan_std_90d',
- 'loan_mean_7d','ud_loan_mean_14d','ud _loan_mean_21d','ud_loan_mean_30d','ud_loan_mean_60d','ud_loan_mean_90d',
- 'loan_skew_7d','ud_loan_skew_14d','ud_loan_skew_21d','ud_loan_skew_30d','ud_loan_skew_60d','ud_loan_skew_90d',
-'loan_mad_7d','ud_loan_mad_14d','ud_loan_mad_21d','ud_loan_mad_30d','ud_loan_mad_60d','ud_loan_mad_90d']
+ 'loan_1d','ud_loan_1d','ud_loan_3d','ud_loan_7d','ud_loan_14d','ud_loan_21d','ud_loan_30d','ud_loan_60d','ud_loan_90d',
+ 'ud_loan_num_30d', 'ud_loan_num_60d', 'ud_loan_num_90d',
+'ud_loan_max_7d','ud_loan_max_14d','ud_loan_max_21d','ud_loan_max_30d','ud_loan_max_60d','ud_loan_max_90d',
+'ud_loan_min_7d','ud_loan_min_14d','ud_loan_min_21d','ud_loan_min_30d','ud_loan_min_60d','ud_loan_min_90d',
+'ud_loan_std_7d','ud_loan_std_14d','ud_loan_std_21d','ud_loan_std_30d','ud_loan_std_60d','ud_loan_std_90d',
+ 'ud_loan_mean_7d','ud_loan_mean_14d','ud _loan_mean_21d','ud_loan_mean_30d','ud_loan_mean_60d','ud_loan_mean_90d',
+ 'ud_loan_skew_7d','ud_loan_skew_14d','ud_loan_skew_21d','ud_loan_skew_30d','ud_loan_skew_60d','ud_loan_skew_90d',
+'loan_mad_7d','ud_loan_mad_14d','ud_loan_mad_21d','ud_loan_mad_30d','ud_loan_mad_60d','ud_loan_mad_90d',
+'ud_real_loan_30d','ud_real_loan_60d','udreal_loan_90d',
+'ud_real_loan_max_30d','ud_real_loan_max_60d','ud_real_loan_max_90d',
+'ud_real_loan_min_30d','ud_real_loan_min_60d','ud_real_loan_min_90d',
+'ud_real_loan_kurt_30d','ud_real_loan_kurt_60d','ud_real_loan_kurt_90d',
+'ud_real_loan_skew_30d','ud_real_loan_skew_60d','ud_real_loan_skew_90d',
+'ud_real_loan_std_30d','ud_real_loan_std_60d','ud_real_loan_std_90d'
+				  ]
 
 	user_date_df.to_csv(fea_fn, index=False)
 
