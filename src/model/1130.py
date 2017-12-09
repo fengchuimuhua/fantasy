@@ -70,7 +70,7 @@ watchlist = [(train, 'train')]
 param = {'max_depth': 7, 'eta': 0.2, 'silent': 1, 'objective': 'reg:linear'}
 param['eval_metric'] = ['rmse']
 evals_result = {}
-bst = xgb.train(param, train, 100, watchlist, evals_result=evals_result)
+bst = xgb.train(param, train, 10, watchlist, evals_result=evals_result)
 
 # output prediction file
 test_x = user_date_df[user_date_df['date'] == '2016-11-30'][feature_col_list]
