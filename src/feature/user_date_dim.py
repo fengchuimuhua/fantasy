@@ -355,7 +355,7 @@ if __name__ == '__main__':
 	click_fn = '../../dataset/t_click.csv'
 	order_fn = '../../dataset/t_order.csv'
 	loan_fn = '../../dataset/t_loan.csv'
-	fea_fn = '../../fea/fea_user_date_2.csv'
+	fea_fn = '../../fea/fea_user_date.csv'
 	if len(sys.argv) != 6:
 		print sys.argv[0] + '\t[user_fn]\t[click_fn]\t[order_fn]\t[loan_fn]\t[fea_fn]'
 	else:
