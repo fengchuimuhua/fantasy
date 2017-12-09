@@ -63,7 +63,7 @@ train_y = user_date_df[user_date_df['date'] <= '2016-10-30']['loan_amount_in_31d
 #valid_x = user_date_df[user_date_df['date'] == '2016-10-30'][feature_col_list]
 #valid_y = user_date_df[user_date_df['date'] == '2016-10-30']['loan_amount_in_31d']
 train = xgb.DMatrix(train_x, label=train_y)
-valid = xgb.DMatrix(valid_x, label=valid_y)
+#valid = xgb.DMatrix(valid_x, label=valid_y)
 
 #watchlist = [(valid, 'valid'), (train, 'train')]
 watchlist = [(train, 'train')]
