@@ -54,7 +54,10 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['clk_cnt_90d'] = gc.apply(lambda x : x.rolling(90).sum()).fillna(value=-1)
 	#step 5. add recent order num
 	ord_df['date'] = ord_df['buy_time']
-	user_date_ord_df = pd.DataFrame({'ord_cnt': ord_df.groupby(['uid', 'date']).size()}).reset_index()
+	ord_df['price_sum'] = ord_df.price * ord_df.qty 
+	ord_df['pay_price_sum'] = ord_df.price_sum - ord_df.discount
+
+	user_date_ord_df = pd.DataFrame({'ord_cnt': ord_df.groupby(['uid', 'date']).size() , 'price_sum':ord_df.groupby(['uid','date']).price_sum.sum() , 'pay_price_sum':ord_df.groupby(['uid','date']).pay_price_sum.sum()}).reset_index()
 	user_date_df = pd.merge(user_date_df, user_date_ord_df, on=['uid','date'], how='left')
 	user_date_df['ord_cnt'] = user_date_df['ord_cnt'].fillna(value=0)
 	user_date_df['ord_cnt_1d'] = user_date_df['ord_cnt']
@@ -66,6 +69,23 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['ord_cnt_30d'] = gord.apply(lambda x : x.rolling(30).sum()).fillna(value=-1)
 	user_date_df['ord_cnt_60d'] = gord.apply(lambda x : x.rolling(60).sum()).fillna(value=-1)
 	user_date_df['ord_cnt_90d'] = gord.apply(lambda x : x.rolling(90).sum()).fillna(value=-1)
+	
+	# recent price , pay_price , pay_price ratio
+	gordprice = user_date_df.groupby('uid').price_sum 
+	user_date_df['ord_price_21d'] = gordprice.apply(lambda x : x.rolling(21).sum()).fillna(value=-1)
+	user_date_df['ord_price_30d'] = gordprice.apply(lambda x : x.rolling(30).sum()).fillna(value=-1)
+	user_date_df['ord_price_60d'] = gordprice.apply(lambda x : x.rolling(60).sum()).fillna(value=-1)
+	
+	gordpayprice = user_date_df.groupby('uid').pay_price_sum 
+	user_date_df['ord_pay_price_21d'] = gordpayprice.apply(lambda x : x.rolling(21).sum()).fillna(value=-1)
+	user_date_df['ord_pay_price_30d'] = gordpayprice.apply(lambda x : x.rolling(30).sum()).fillna(value=-1)
+	user_date_df['ord_pay_price_60d'] = gordpayprice.apply(lambda x : x.rolling(60).sum()).fillna(value=-1)
+	
+	user_date_df['ord_pay_price_ratio_21d'] = user_date_df.ord_price_21d / user_date_df.ord_pay_price_21d
+	user_date_df['ord_pay_price_ratio_30d'] = user_date_df.ord_price_30d / user_date_df.ord_pay_price_30d
+	user_date_df['ord_pay_price_ratio_60d'] = user_date_df.ord_price_60d / user_date_df.ord_pay_price_60d
+
+
 	#step 6. add recent ctr
 	user_date_df['ctr_1d'] = (user_date_df['ord_cnt_1d'] + 0.01) / (user_date_df['clk_cnt_1d'] + 0.05)
 	user_date_df['ctr_3d'] = (user_date_df['ord_cnt_3d'] + 0.01) / (user_date_df['clk_cnt_3d'] + 0.05)
@@ -84,11 +104,47 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['ctr_60d'] = map(lambda ord, clk, ctr : ctr_norm(ord, clk, ctr), user_date_df['ord_cnt_60d'], user_date_df['clk_cnt_60d'], user_date_df['ctr_60d'])
 	user_date_df['ctr_90d'] = map(lambda ord, clk, ctr : ctr_norm(ord, clk, ctr), user_date_df['ord_cnt_90d'], user_date_df['clk_cnt_90d'], user_date_df['ctr_90d'])
 
+
+
 	#step 7. add recent loan
 	print 'loan_sum'
-
-	
 	loan_df['date'] = loan_df['loan_time'].map(lambda lt : lt.split(' ')[0])
+	#add recent plannum 
+	uid_date_plannum = loan_df.groupby(['uid', 'date']).plannum.sum().reset_index()
+	user_date_df = pd.merge(user_date_df, uid_date_plannum, on=['uid','date'], how='left')
+	user_date_df['plannum'] = user_date_df['plannum'].fillna(value=0)
+	gplannum = user_date_df.groupby('uid').plannum 
+	user_date_df['plannum_21d'] = gplannum.apply(lambda x : x.rolling(21).sum()).fillna(value = -1)
+	user_date_df['plannum_30d'] = gplannum.apply(lambda x : x.rolling(30).sum()).fillna(value = -1)
+	user_date_df['plannum_60d'] = gplannum.apply(lambda x : x.rolling(60).sum()).fillna(value = -1)
+	user_date_df['plannum_90d'] = gplannum.apply(lambda x : x.rolling(90).sum()).fillna(value = -1)
+	
+	user_date_df['plannum_max_21d'] = gplannum.apply(lambda x : x.rolling(21).max()).fillna(value = -1)
+	user_date_df['plannum_max_30d'] = gplannum.apply(lambda x : x.rolling(30).max()).fillna(value = -1)
+	user_date_df['plannum_max_60d'] = gplannum.apply(lambda x : x.rolling(60).max()).fillna(value = -1)
+	user_date_df['plannum_max_90d'] = gplannum.apply(lambda x : x.rolling(90).max()).fillna(value = -1)
+	
+	user_date_df['plannum_min_21d'] = gplannum.apply(lambda x : x.rolling(21).min()).fillna(value = -1)
+	user_date_df['plannum_min_30d'] = gplannum.apply(lambda x : x.rolling(30).min()).fillna(value = -1)
+	user_date_df['plannum_min_60d'] = gplannum.apply(lambda x : x.rolling(60).min()).fillna(value = -1)
+	user_date_df['plannum_min_90d'] = gplannum.apply(lambda x : x.rolling(90).min()).fillna(value = -1)
+	
+	user_date_df['plannum_skew_21d'] = gplannum.apply(lambda x : x.rolling(21).skew()).fillna(value = -1)
+	user_date_df['plannum_skew_30d'] = gplannum.apply(lambda x : x.rolling(30).skew()).fillna(value = -1)
+	user_date_df['plannum_skew_60d'] = gplannum.apply(lambda x : x.rolling(60).skew()).fillna(value = -1)
+	user_date_df['plannum_skew_90d'] = gplannum.apply(lambda x : x.rolling(90).skew()).fillna(value = -1)
+	
+	user_date_df['plannum_kurt_21d'] = gplannum.apply(lambda x : x.rolling(21).kurt()).fillna(value = -1)
+	user_date_df['plannum_kurt_30d'] = gplannum.apply(lambda x : x.rolling(30).kurt()).fillna(value = -1)
+	user_date_df['plannum_kurt_60d'] = gplannum.apply(lambda x : x.rolling(60).kurt()).fillna(value = -1)
+	user_date_df['plannum_kurt_90d'] = gplannum.apply(lambda x : x.rolling(90).kurt()).fillna(value = -1)
+	
+	user_date_df['plannum_std_21d'] = gplannum.apply(lambda x : x.rolling(21).std()).fillna(value = -1)
+	user_date_df['plannum_std_30d'] = gplannum.apply(lambda x : x.rolling(30).std()).fillna(value = -1)
+	user_date_df['plannum_std_60d'] = gplannum.apply(lambda x : x.rolling(60).std()).fillna(value = -1)
+	user_date_df['plannum_std_90d'] = gplannum.apply(lambda x : x.rolling(90).std()).fillna(value = -1)
+	
+
 	uid_date_loan = loan_df.groupby(['uid', 'date']).real_loan_amount.sum().reset_index()
 	#uid_date_loancnt = 
 	user_date_df = pd.merge(user_date_df, uid_date_loan, on=['uid','date'], how='left')
@@ -234,15 +290,15 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 	user_date_df['real_loan_std_60d'] = gloan.apply(lambda x : x.rolling(60).std()).fillna(value=-1)
 	user_date_df['real_loan_std_90d'] = gloan.apply(lambda x : x.rolling(90).std()).fillna(value=-1)
 
-
+	
 	# step 8. output
 	print 'save...'
 	user_date_df = 	user_date_df[['uid', 'date', 'active_days',
 				  'clk_cnt_1d', 'clk_cnt_3d', 'clk_cnt_7d', 'clk_cnt_14d', 'clk_cnt_21d', 'clk_cnt_30d', 'clk_cnt_60d','clk_cnt_90d',
 				  'ord_cnt_1d', 'ord_cnt_3d', 'ord_cnt_7d', 'ord_cnt_14d', 'ord_cnt_21d', 'ord_cnt_30d', 'ord_cnt_60d', 'ord_cnt_90d',
+				  'ord_price_21d','ord_price_30d','ord_price_60d','ord_pay_price_21d','ord_pay_price_30d','ord_pay_price_60d','ord_pay_price_ratio_21d','ord_pay_price_ratio_30d','ord_pay_price_ratio_60d',
 				  'ctr_1d', 'ctr_3d', 'ctr_7d', 'ctr_14d', 'ctr_21d', 'ctr_30d', 'ctr_60d', 'ctr_90d',
-				  'loan_1d', 'loan_1d', 'loan_3d', 'loan_7d', 'loan_14d', 'loan_21d', 'loan_30d', 'loan_60d',
-				  'loan_90d',
+				  'loan_1d', 'loan_1d', 'loan_3d', 'loan_7d', 'loan_14d', 'loan_21d', 'loan_30d', 'loan_60d','loan_90d',
 				  'loan_num_30d', 'loan_num_60d', 'loan_num_90d',
 				  'loan_max_7d', 'loan_max_14d', 'loan_max_21d', 'loan_max_30d', 'loan_max_60d', 'loan_max_90d',
 				  'loan_min_7d', 'loan_min_14d', 'loan_min_21d', 'loan_min_30d', 'loan_min_60d', 'loan_min_90d',
@@ -256,6 +312,12 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 				  'real_loan_kurt_30d','real_loan_kurt_60d','real_loan_kurt_90d',
 				  'real_loan_skew_30d','real_loan_skew_60d','real_loan_skew_90d',
 				  'real_loan_std_30d','real_loan_std_60d','real_loan_std_90d',
+				  'plannum_21d','plannum_30d','plannum_60d','plannum_max_90d',
+				  'plannum_max_21d', 'plannum_max_30d', 'plannum_max_60d','plannum_max_90d',
+				  'plannum_min_21d', 'plannum_min_30d', 'plannum_min_60d','plannum_min_90d',
+				  'plannum_kurt_21d','plannum_kurt_30d','plannum_kurt_60d','plannum_kurt_90d',
+				  'plannum_skew_21d','plannum_skew_30d','plannum_skew_60d','plannum_skew_90d',
+				  'plannum_std_21d', 'plannum_std_30d', 'plannum_std_60d','plannum_std_90d',
 
 				  ]]
 
@@ -276,7 +338,13 @@ def gen_fea(user_fn, click_fn, order_fn, loan_fn, fea_fn):
 'ud_real_loan_min_30d','ud_real_loan_min_60d','ud_real_loan_min_90d',
 'ud_real_loan_kurt_30d','ud_real_loan_kurt_60d','ud_real_loan_kurt_90d',
 'ud_real_loan_skew_30d','ud_real_loan_skew_60d','ud_real_loan_skew_90d',
-'ud_real_loan_std_30d','ud_real_loan_std_60d','ud_real_loan_std_90d'
+'ud_real_loan_std_30d','ud_real_loan_std_60d','ud_real_loan_std_90d',
+'ud_plannum_21d','ud_plannum_30d','ud_plannum_60d','ud_plannum_max_90d',
+'ud_plannum_max_21d', 'ud_plannum_max_30d', 'ud_plannum_max_60d','ud_plannum_max_90d',
+'ud_plannum_min_21d', 'ud_plannum_min_30d', 'ud_plannum_min_60d','ud_plannum_min_90d',
+'ud_plannum_kurt_21d','ud_plannum_kurt_30d','ud_plannum_kurt_60d','ud_plannum_kurt_90d',
+'ud_plannum_skew_21d','ud_plannum_skew_30d','ud_plannum_skew_60d','ud_plannum_skew_90d',
+'ud_plannum_std_21d', 'ud_plannum_std_30d', 'ud_plannum_std_60d','ud_plannum_std_90d',
 				  ]
 
 	user_date_df.to_csv(fea_fn, index=False)
@@ -287,7 +355,7 @@ if __name__ == '__main__':
 	click_fn = '../../dataset/t_click.csv'
 	order_fn = '../../dataset/t_order.csv'
 	loan_fn = '../../dataset/t_loan.csv'
-	fea_fn = '../../fea/fea_user_date.csv'
+	fea_fn = '../../fea/fea_user_date_2.csv'
 	if len(sys.argv) != 6:
 		print sys.argv[0] + '\t[user_fn]\t[click_fn]\t[order_fn]\t[loan_fn]\t[fea_fn]'
 	else:

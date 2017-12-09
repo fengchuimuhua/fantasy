@@ -1,0 +1,15 @@
+user_date_dim.py	[user_fn]	[click_fn]	[order_fn]	[loan_fn]	[fea_fn]
+read ...
+user_df , date_df
+active_days
+clk
+loan_sum
+loan max
+loan mean
+loan skew
+loan mad
+loan min
+loan std
+real loan statistic info 
+save...
+time cost : 1:36:59.384220
